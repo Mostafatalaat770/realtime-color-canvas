@@ -1,77 +1,79 @@
-module Main exposing (main)
+module Frontend exposing (Model, app)
 
-import Browser
 import Element exposing (..)
 import Element.Background
 import Element.Border
 import Element.Input as Input
+import Env exposing (..)
 import Html exposing (Html)
+import Lamdera
 import List exposing (append)
+import Types exposing (BackendMsg(..), FrontendModel, FrontendMsg(..), ToFrontend(..))
 
 
-main =
-    Browser.sandbox { init = init, update = update, view = view }
+app =
+    Lamdera.frontend
+        { init = \_ _ -> init
+        , update = update
+        , updateFromBackend = updateFromBackend
+        , view =
+            \model ->
+                { title = "Canvas"
+                , body = [ view model ]
+                }
+        , subscriptions = \_ -> Sub.none
+        , onUrlChange = \_ -> NoOpFrontendMsg
+        , onUrlRequest = \_ -> NoOpFrontendMsg
+        }
 
 
 
 -- MODEL
 
 
-red =
-    Element.rgb 255 0 0
-
-
-green =
-    Element.rgb 0 255 0
-
-
-blue =
-    Element.rgb 0 0 255
-
-
-yellow =
-    Element.rgb 255 255 0
-
-
-rose =
-    Element.rgb 255 0 255
-
-
 type alias Model =
-    { colorOptions : List Color, canvas : List Color }
+    FrontendModel
 
 
-init : Model
+init : ( Model, Cmd FrontendMsg )
 init =
-    { colorOptions = [ red, green, blue, yellow, rose ]
-    , canvas = []
-    }
+    ( { colorOptions = [ red, green, blue, yellow, rose ]
+      , canvas = []
+      , clientId = ""
+      }
+    , Cmd.none
+    )
 
 
 
 -- UPDATE
 
 
-type Msg
-    = NoOp
-    | AddColor Color
-
-
-update : Msg -> Model -> Model
+update : FrontendMsg -> Model -> ( Model, Cmd FrontendMsg )
 update msg model =
     case msg of
-        NoOp ->
-            model
+        NoOpFrontendMsg ->
+            ( model, Cmd.none )
 
         AddColor color ->
-            { model | canvas = append model.canvas [ color ] }
+            ( { model | canvas = append model.canvas [ color ] }, Cmd.none )
+
+
+updateFromBackend : ToFrontend -> Model -> ( Model, Cmd FrontendMsg )
+updateFromBackend msg model =
+    case msg of
+        CanvasNewColors newColors clientId ->
+            ( { model | canvas = newColors, clientId = clientId }, Cmd.none )
+
+        NoOpToFrontend ->
+            ( model, Cmd.none )
 
 
 
 -- VIEW
 
 
-view : Model -> Html Msg
+view : Model -> Html FrontendMsg
 view model =
     Element.layout
         []
