@@ -48,7 +48,11 @@ updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Cmd
 updateFromFrontend _ clientId msg model =
     case msg of
         ColorAdded color ->
-            ( { model | canvas = append model.canvas [ color ] }, broadcast (CanvasNewColors model.canvas clientId) )
+            let
+                canvasWithAddedColor =
+                    append model.canvas [ color ]
+            in
+            ( { model | canvas = canvasWithAddedColor }, broadcast (CanvasNewColors canvasWithAddedColor clientId) )
 
         NoOpToBackend ->
             ( model, Cmd.none )
