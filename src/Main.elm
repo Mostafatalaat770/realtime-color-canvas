@@ -1,7 +1,9 @@
 module Main exposing (main)
 
 import Browser
-import Html exposing (Html, div, text)
+import Html exposing (Html, button, div, text)
+import Html.Events exposing (onClick)
+import List exposing (append)
 
 
 main =
@@ -13,12 +15,14 @@ main =
 
 
 type alias Model =
-    { colorOptions : List String }
+    { colorOptions : List String, canvas : List String }
 
 
 init : Model
 init =
-    { colorOptions = [ "red", "green", "blue", "yellow", "rose" ] }
+    { colorOptions = [ "red", "green", "blue", "yellow", "rose" ]
+    , canvas = []
+    }
 
 
 
@@ -27,6 +31,7 @@ init =
 
 type Msg
     = NoOp
+    | AddColor String
 
 
 update : Msg -> Model -> Model
@@ -34,6 +39,9 @@ update msg model =
     case msg of
         NoOp ->
             model
+
+        AddColor color ->
+            { model | canvas = append model.canvas [ color ] }
 
 
 
@@ -43,6 +51,8 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ div [] [ text "Available Color Options" ]
-        , div [] (List.map (\color -> div [] [ text color ]) model.colorOptions)
+        [ div [] [ text "Canvas" ]
+        , div [] (List.map (\color -> div [] [ text color ]) model.canvas)
+        , div [] [ text "Available Color Options" ]
+        , div [] (List.map (\color -> button [ onClick (AddColor color) ] [ text color ]) model.colorOptions)
         ]
