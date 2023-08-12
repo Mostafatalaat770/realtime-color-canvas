@@ -1,8 +1,9 @@
 module Main exposing (main)
 
 import Browser
-import Html exposing (Html, button, div, text)
-import Html.Events exposing (onClick)
+import Element exposing (..)
+import Element.Input as Input
+import Html exposing (Html)
 import List exposing (append)
 
 
@@ -50,9 +51,21 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ div [] [ text "Canvas" ]
-        , div [] (List.map (\color -> div [] [ text color ]) model.canvas)
-        , div [] [ text "Available Color Options" ]
-        , div [] (List.map (\color -> button [ onClick (AddColor color) ] [ text color ]) model.colorOptions)
-        ]
+    Element.layout
+        []
+    <|
+        column
+            [ spacing 10, padding 10 ]
+            [ wrappedRow [ spacing 10 ] (List.map (\color -> column [] [ text color ]) model.canvas)
+            , row
+                [ spacing 10
+                ]
+                (List.map
+                    (\color ->
+                        Input.button
+                            []
+                            { onPress = Just (AddColor color), label = text color }
+                    )
+                    model.colorOptions
+                )
+            ]
