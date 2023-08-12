@@ -2,6 +2,8 @@ module Main exposing (main)
 
 import Browser
 import Element exposing (..)
+import Element.Background
+import Element.Border
 import Element.Input as Input
 import Html exposing (Html)
 import List exposing (append)
@@ -15,13 +17,33 @@ main =
 -- MODEL
 
 
+red =
+    Element.rgb 255 0 0
+
+
+green =
+    Element.rgb 0 255 0
+
+
+blue =
+    Element.rgb 0 0 255
+
+
+yellow =
+    Element.rgb 255 255 0
+
+
+rose =
+    Element.rgb 255 0 255
+
+
 type alias Model =
-    { colorOptions : List String, canvas : List String }
+    { colorOptions : List Color, canvas : List Color }
 
 
 init : Model
 init =
-    { colorOptions = [ "red", "green", "blue", "yellow", "rose" ]
+    { colorOptions = [ red, green, blue, yellow, rose ]
     , canvas = []
     }
 
@@ -32,7 +54,7 @@ init =
 
 type Msg
     = NoOp
-    | AddColor String
+    | AddColor Color
 
 
 update : Msg -> Model -> Model
@@ -56,15 +78,31 @@ view model =
     <|
         column
             [ spacing 10, padding 10 ]
-            [ wrappedRow [ spacing 10 ] (List.map (\color -> column [] [ text color ]) model.canvas)
+            [ wrappedRow [ spacing 10 ]
+                (List.map
+                    (\color ->
+                        el
+                            [ width (px 50)
+                            , height (px 50)
+                            , Element.Border.rounded 50
+                            , Element.Background.color color
+                            ]
+                            (text "")
+                    )
+                    model.canvas
+                )
             , row
                 [ spacing 10
                 ]
                 (List.map
                     (\color ->
                         Input.button
-                            []
-                            { onPress = Just (AddColor color), label = text color }
+                            [ width (px 50)
+                            , height (px 50)
+                            , Element.Border.rounded 50
+                            , Element.Background.color color
+                            ]
+                            { onPress = Just (AddColor color), label = text "" }
                     )
                     model.colorOptions
                 )
