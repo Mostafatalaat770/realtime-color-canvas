@@ -1,21 +1,22 @@
 module Main exposing (main)
-import Browser
-import Html exposing (Html)
-import Html exposing (div)
-import Html exposing (text)
 
-main = Browser.sandbox { init = init, update = update, view = view }
+import Browser
+import Html exposing (Html, div, text)
+
+
+main =
+    Browser.sandbox { init = init, update = update, view = view }
+
 
 
 -- MODEL
 
-type alias Model = 
-    {
-    colorOptions : List String
-    }
+
+type alias Model =
+    { colorOptions : List String }
 
 
-init: Model
+init : Model
 init =
     { colorOptions = [ "red", "green", "blue", "yellow", "rose" ] }
 
@@ -23,11 +24,12 @@ init =
 
 -- UPDATE
 
+
 type Msg
     = NoOp
 
 
-update: Msg -> Model -> Model
+update : Msg -> Model -> Model
 update msg model =
     case msg of
         NoOp ->
@@ -37,12 +39,10 @@ update msg model =
 
 -- VIEW
 
-view: Model -> Html Msg
 
+view : Model -> Html Msg
 view model =
     div []
         [ div [] [ text "Available Color Options" ]
         , div [] (List.map (\color -> div [] [ text color ]) model.colorOptions)
         ]
-
-        
