@@ -6,9 +6,9 @@ import Element.Border
 import Element.Input as Input
 import Env exposing (..)
 import Html exposing (Html)
-import Lamdera
+import Lamdera exposing (sendToBackend)
 import List exposing (append)
-import Types exposing (BackendMsg(..), FrontendModel, FrontendMsg(..), ToFrontend(..))
+import Types exposing (BackendMsg(..), FrontendModel, FrontendMsg(..), ToBackend(..), ToFrontend(..))
 
 
 app =
@@ -87,7 +87,7 @@ view model =
                             [ width (px 50)
                             , height (px 50)
                             , Element.Border.rounded 50
-                            , Element.Background.color color
+                            , Element.Background.color (fromRgb color)
                             ]
                             (text "")
                     )
@@ -102,7 +102,7 @@ view model =
                             [ width (px 50)
                             , height (px 50)
                             , Element.Border.rounded 50
-                            , Element.Background.color color
+                            , Element.Background.color (fromRgb color)
                             ]
                             { onPress = Just (AddColor color), label = text "" }
                     )

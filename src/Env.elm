@@ -1,6 +1,6 @@
 module Env exposing (..)
 
-import Element exposing (Color, Element)
+import Types exposing (Color)
 
 
 
@@ -14,24 +14,24 @@ dummyConfigItem =
 
 red : Color
 red =
-    Element.rgb 255 0 0
+    { red = 255, green = 0, blue = 0, alpha = 1 }
 
 
 green : Color
 green =
-    Element.rgb 0 255 0
+    { red = 0, green = 255, blue = 0, alpha = 1 }
 
 
 blue : Color
 blue =
-    Element.rgb 0 0 255
+    { red = 0, green = 0, blue = 255, alpha = 1 }
 
 
 yellow : Color
 yellow =
-    Element.rgb 255 255 0
+    { red = 255, green = 255, blue = 0, alpha = 1 }
 
 
 rose : Color
 rose =
-    Element.rgb 255 0 255
+    { red = 255, green = 0, blue = 255, alpha = 1 }

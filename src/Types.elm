@@ -4,6 +4,10 @@ import Element exposing (Color)
 import Lamdera exposing (ClientId, SessionId)
 
 
+type alias Color =
+    { red : Float, green : Float, blue : Float, alpha : Float }
+
+
 type alias FrontendModel =
     { colorOptions : List Color, canvas : List Color, clientId : String }
 
