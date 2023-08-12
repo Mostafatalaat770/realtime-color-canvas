@@ -56,7 +56,7 @@ update msg model =
             ( model, Cmd.none )
 
         AddColor color ->
-            ( { model | canvas = append model.canvas [ color ] }, Cmd.none )
+            ( { model | canvas = append model.canvas [ color ] }, sendToBackend (ColorAdded color) )
 
 
 updateFromBackend : ToFrontend -> Model -> ( Model, Cmd FrontendMsg )
