@@ -83,7 +83,7 @@ updateFromBackend msg model =
 view : Model -> Html FrontendMsg
 view model =
     Element.layout
-        []
+        [ htmlAttribute (Html.Attributes.style "touch-action" "manipulation") ]
     <|
         column
             [ spacing 10, padding 10, height fill, width fill ]
