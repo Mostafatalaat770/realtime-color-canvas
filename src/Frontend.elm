@@ -87,28 +87,8 @@ view model =
     <|
         column
             [ spacing 10, padding 10, height fill, width fill ]
-            [ el [ height (fillPortion 4), scrollbarY, htmlAttribute (Html.Attributes.id "canvas-container"), width (fill |> maximum 568), centerX, htmlAttribute (Html.Attributes.style "overflow-x" "hidden") ]
-                (wrappedRow [ spacing 10 ]
-                    (List.map
-                        (\color ->
-                            colorElement color False
-                        )
-                        model.canvas
-                    )
-                )
-            , row
-                [ spacing 10, height (fillPortion 1), centerX ]
-                [ row [ spacing 10 ]
-                    (List.map
-                        (\color ->
-                            colorElement color True
-                        )
-                        model.colorOptions
-                    )
-                , Input.button
-                    []
-                    { onPress = Just ResetCanvas, label = text "Reset" }
-                ]
+            [ canvasElement model.canvas
+            , controlElement model.colorOptions
             ]
 
 
@@ -131,6 +111,36 @@ colorElement color isButton =
             , Element.Background.color (fromRgb color)
             ]
             (text "")
+
+
+canvasElement : List Types.Color -> Element FrontendMsg
+canvasElement colors =
+    el [ height (fillPortion 4), scrollbarY, htmlAttribute (Html.Attributes.id "canvas-container"), width (fill |> maximum 568), centerX, htmlAttribute (Html.Attributes.style "overflow-x" "hidden") ]
+        (wrappedRow [ spacing 10 ]
+            (List.map
+                (\color ->
+                    colorElement color False
+                )
+                colors
+            )
+        )
+
+
+controlElement : List Types.Color -> Element FrontendMsg
+controlElement options =
+    row
+        [ spacing 10, height (fillPortion 1), centerX ]
+        [ row [ spacing 10 ]
+            (List.map
+                (\color ->
+                    colorElement color True
+                )
+                options
+            )
+        , Input.button
+            []
+            { onPress = Just ResetCanvas, label = text "Reset" }
+        ]
 
 
 scrollToBottom : Cmd FrontendMsg
