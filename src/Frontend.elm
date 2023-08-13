@@ -41,7 +41,7 @@ type alias Model =
 
 init : ( Model, Cmd FrontendMsg )
 init =
-    ( { colorOptions = [ red, green, blue, yellow, rose ]
+    ( { colorOptions = [ color1, color2, color3, color4, color5 ]
       , canvas = []
       , clientId = ""
       }

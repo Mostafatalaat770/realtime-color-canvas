@@ -22,11 +22,11 @@ type alias Model =
 init : ( Model, Cmd BackendMsg )
 init =
     ( { colorOptions =
-            [ red
-            , green
-            , blue
-            , yellow
-            , rose
+            [ color1
+            , color2
+            , color3
+            , color4
+            , color5
             ]
       , canvas = []
       }

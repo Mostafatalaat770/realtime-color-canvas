@@ -12,26 +12,26 @@ dummyConfigItem =
     ""
 
 
-red : Color
-red =
+color1 : Color
+color1 =
     { red = 255, green = 0, blue = 0, alpha = 1 }
 
 
-green : Color
-green =
+color2 : Color
+color2 =
     { red = 0, green = 255, blue = 0, alpha = 1 }
 
 
-blue : Color
-blue =
+color3 : Color
+color3 =
     { red = 0, green = 0, blue = 255, alpha = 1 }
 
 
-yellow : Color
-yellow =
+color4 : Color
+color4 =
     { red = 255, green = 255, blue = 0, alpha = 1 }
 
 
-rose : Color
-rose =
+color5 : Color
+color5 =
     { red = 255, green = 0, blue = 255, alpha = 1 }
