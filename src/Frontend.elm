@@ -86,13 +86,7 @@ view model =
             [ wrappedRow [ spacing 10 ]
                 (List.map
                     (\color ->
-                        el
-                            [ width (px 50)
-                            , height (px 50)
-                            , Element.Border.rounded 50
-                            , Element.Background.color (fromRgb color)
-                            ]
-                            (text "")
+                        colorElement color False
                     )
                     model.canvas
                 )
@@ -101,13 +95,7 @@ view model =
                 [ row [ spacing 10 ]
                     (List.map
                         (\color ->
-                            Input.button
-                                [ width (px 50)
-                                , height (px 50)
-                                , Element.Border.rounded 50
-                                , Element.Background.color (fromRgb color)
-                                ]
-                                { onPress = Just (AddColor color), label = text "" }
+                            colorElement color True
                         )
                         model.colorOptions
                     )
@@ -116,3 +104,24 @@ view model =
                     { onPress = Just ResetCanvas, label = text "Reset" }
                 ]
             ]
+
+
+colorElement : Types.Color -> Bool -> Element FrontendMsg
+colorElement color isButton =
+    if isButton then
+        Input.button
+            [ width (px 50)
+            , height (px 50)
+            , Element.Border.rounded 50
+            , Element.Background.color (fromRgb color)
+            ]
+            { onPress = Just (AddColor color), label = text "" }
+
+    else
+        el
+            [ width (px 50)
+            , height (px 50)
+            , Element.Border.rounded 50
+            , Element.Background.color (fromRgb color)
+            ]
+            (text "")
