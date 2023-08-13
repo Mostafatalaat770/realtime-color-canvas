@@ -17,15 +17,15 @@ type alias BackendModel =
 
 
 type FrontendMsg
-    = NoOpFrontendMsg
-    | AddColor Color
+    = AddColor Color
     | ResetCanvas
+    | NoOpFrontendMsg
 
 
 type ToBackend
-    = NoOpToBackend
-    | ColorAdded Color
+    = ColorAdded Color
     | CanvasHasBeenReset
+    | NoOpToBackend
 
 
 type BackendMsg
@@ -34,5 +34,5 @@ type BackendMsg
 
 
 type ToFrontend
-    = NoOpToFrontend
-    | CanvasNewColors (List Color) String
+    = CanvasNewColors (List Color) String
+    | NoOpToFrontend
