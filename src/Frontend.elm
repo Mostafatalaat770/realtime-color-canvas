@@ -1,13 +1,17 @@
 module Frontend exposing (Model, app)
 
+import Browser.Dom
 import Element exposing (..)
 import Element.Background
 import Element.Border
 import Element.Input as Input
 import Env exposing (..)
 import Html exposing (Html)
+import Html.Attributes
 import Lamdera exposing (sendToBackend)
 import List exposing (append)
+import Platform exposing (Task)
+import Task exposing (Task)
 import Types exposing (BackendMsg(..), FrontendModel, FrontendMsg(..), ToBackend(..), ToFrontend(..))
 
 
@@ -56,7 +60,7 @@ update msg model =
             ( model, Cmd.none )
 
         AddColor color ->
-            ( { model | canvas = append model.canvas [ color ] }, sendToBackend (ColorAdded color) )
+            ( { model | canvas = append model.canvas [ color ] }, Cmd.batch [ sendToBackend (ColorAdded color), scrollToBottom ] )
 
         ResetCanvas ->
             ( { model | canvas = [] }, sendToBackend CanvasHasBeenReset )
@@ -66,7 +70,7 @@ updateFromBackend : ToFrontend -> Model -> ( Model, Cmd FrontendMsg )
 updateFromBackend msg model =
     case msg of
         CanvasNewColors newColors clientId ->
-            ( { model | canvas = newColors, clientId = clientId }, Cmd.none )
+            ( { model | canvas = newColors, clientId = clientId }, scrollToBottom )
 
         NoOpToFrontend ->
             ( model, Cmd.none )
@@ -82,16 +86,18 @@ view model =
         []
     <|
         column
-            [ spacing 10, padding 10 ]
-            [ wrappedRow [ spacing 10 ]
-                (List.map
-                    (\color ->
-                        colorElement color False
+            [ spacing 10, padding 10, height fill, width fill ]
+            [ el [ height (fillPortion 4), scrollbarY, htmlAttribute (Html.Attributes.id "canvas-container"), width (fill |> maximum 568), centerX, htmlAttribute (Html.Attributes.style "overflow-x" "hidden") ]
+                (wrappedRow [ spacing 10 ]
+                    (List.map
+                        (\color ->
+                            colorElement color False
+                        )
+                        model.canvas
                     )
-                    model.canvas
                 )
             , row
-                [ spacing 10 ]
+                [ spacing 10, height (fillPortion 1), centerX ]
                 [ row [ spacing 10 ]
                     (List.map
                         (\color ->
@@ -125,3 +131,13 @@ colorElement color isButton =
             , Element.Background.color (fromRgb color)
             ]
             (text "")
+
+
+scrollToBottom : Cmd FrontendMsg
+scrollToBottom =
+    Browser.Dom.getViewportOf "canvas-container"
+        |> Task.andThen
+            (\viewport ->
+                Browser.Dom.setViewportOf "canvas-container" 0 viewport.scene.height
+            )
+        |> Task.attempt (\_ -> NoOpFrontendMsg)
