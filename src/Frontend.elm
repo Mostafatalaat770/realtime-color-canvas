@@ -58,6 +58,9 @@ update msg model =
         AddColor color ->
             ( { model | canvas = append model.canvas [ color ] }, sendToBackend (ColorAdded color) )
 
+        ResetCanvas ->
+            ( { model | canvas = [] }, sendToBackend CanvasHasBeenReset )
+
 
 updateFromBackend : ToFrontend -> Model -> ( Model, Cmd FrontendMsg )
 updateFromBackend msg model =
@@ -94,18 +97,22 @@ view model =
                     model.canvas
                 )
             , row
-                [ spacing 10
-                ]
-                (List.map
-                    (\color ->
-                        Input.button
-                            [ width (px 50)
-                            , height (px 50)
-                            , Element.Border.rounded 50
-                            , Element.Background.color (fromRgb color)
-                            ]
-                            { onPress = Just (AddColor color), label = text "" }
+                [ spacing 10 ]
+                [ row [ spacing 10 ]
+                    (List.map
+                        (\color ->
+                            Input.button
+                                [ width (px 50)
+                                , height (px 50)
+                                , Element.Border.rounded 50
+                                , Element.Background.color (fromRgb color)
+                                ]
+                                { onPress = Just (AddColor color), label = text "" }
+                        )
+                        model.colorOptions
                     )
-                    model.colorOptions
-                )
+                , Input.button
+                    []
+                    { onPress = Just ResetCanvas, label = text "Reset" }
+                ]
             ]

@@ -54,6 +54,9 @@ updateFromFrontend _ clientId msg model =
             in
             ( { model | canvas = canvasWithAddedColor }, broadcast (CanvasNewColors canvasWithAddedColor clientId) )
 
+        CanvasHasBeenReset ->
+            ( { model | canvas = [] }, broadcast (CanvasNewColors [] clientId) )
+
         NoOpToBackend ->
             ( model, Cmd.none )
 
